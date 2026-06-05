@@ -1,8 +1,12 @@
-from django.urls import path
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
 from . import views
+
+# Router tu dong tao cac endpoint CRUD
+router = DefaultRouter()
+router.register(r'books', views.BookViewSet, basename='book')
 
 urlpatterns = [
     path('', views.index, name='index'),
-    path('api/books/', views.book_list, name='book-list'),
-    path('api/books/<int:pk>/', views.book_detail, name='book-detail'),
+    path('api/', include(router.urls)),
 ]
