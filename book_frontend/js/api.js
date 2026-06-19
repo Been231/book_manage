@@ -1,5 +1,8 @@
 const API_BASE = 'http://127.0.0.1:8000';
 
+/**
+ * ===== TOKEN MANAGEMENT =====
+ */
 function getToken() {
     return localStorage.getItem('access_token');
 }
@@ -18,6 +21,10 @@ function isLoggedIn() {
     return !!getToken();
 }
 
+
+/**
+ * ===== API REQUEST HELPER =====
+ */
 async function apiFetch(endpoint, options = {}) {
     const token = getToken();
     const headers = {
@@ -40,6 +47,10 @@ async function apiFetch(endpoint, options = {}) {
     return response;
 }
 
+
+/**
+ * ===== AUTHENTICATION ENDPOINTS =====
+ */
 async function login(username, password) {
     const response = await fetch(`${API_BASE}/api/token/`, {
         method: 'POST',
@@ -53,4 +64,27 @@ async function login(username, password) {
         return { success: true };
     }
     return { success: false, message: 'Sai username hoac password' };
+}
+
+async function logout() {
+    try {
+        const response = await apiFetch('/api/logout/', {
+            method: 'POST',
+        });
+
+        if (response && response.ok) {
+            clearToken();
+            window.location.href = 'login.html';
+            return { success: true, message: 'Đăng xuất thành công' };
+        } else {
+            clearToken();
+            window.location.href = 'login.html';
+            return { success: true, message: 'Đăng xuất thành công' };
+        }
+    } catch (error) {
+        console.error('Logout error:', error);
+        clearToken();
+        window.location.href = 'login.html';
+        return { success: true, message: 'Đăng xuất thành công' };
+    }
 }

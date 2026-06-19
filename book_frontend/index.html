@@ -150,7 +150,12 @@
 <script>
     if (!isLoggedIn()) window.location.href = 'login.html';
     else loadBooks();
-    function handleLogout() { clearToken(); window.location.href = 'login.html'; }
+    
+    async function handleLogout() {
+        if (confirm('Bạn có chắc chắn muốn đăng xuất?')) {
+            await logout();
+        }
+    }
 </script>
 </body>
 </html>
